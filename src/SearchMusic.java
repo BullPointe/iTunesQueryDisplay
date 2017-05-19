@@ -9,7 +9,7 @@ public class SearchMusic {
 	{
 		
 			
-			Url="https://itunes.apple.com/search?term"+term.replaceAll(" ", "+")+"&limit="+limit;
+			Url="https://itunes.apple.com/search?term="+term.replaceAll(" ", "+")+"&limit="+limit;
 			JavaUrlConnectionReader test= new JavaUrlConnectionReader(Url);
 			return test.parseSongData();
 			
