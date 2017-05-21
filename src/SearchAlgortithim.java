@@ -5,6 +5,7 @@ public class SearchAlgortithim
 	private JavaUrlConnectionReader reader;
 	private String url = "http://ip-api.com/json";
 	private String weatherUrl = "http://api.wunderground.com/api/52633b82f70e1334/conditions/q/";
+	private String youTubeUrl = "https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&q=";
 	private JSONObject userLocation;
 	private	ArrayList<String> weatherResults = new ArrayList<String>();
 
@@ -81,6 +82,39 @@ public class SearchAlgortithim
 		
 		
 		return null;
+	}
+	
+	
+	public String getYouTubeUrl(String query)
+	{
+		System.out.println(query);
+		String videoId = "";
+		String temp = "https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&q="+query+"&type=video&key=AIzaSyDjGzz1cAc5clmjBe6uQSw0cCZraahsVAY";
+		reader = new JavaUrlConnectionReader(temp);
+		
+		String youTubeData = reader.getAllSongs();
+		
+		JSONParser parser = new JSONParser();
+		JSONObject jsonObject;
+		
+		try
+		{
+			jsonObject = (JSONObject)parser.parse(youTubeData);
+			System.out.println(jsonObject.keySet());
+			JSONArray youTubeVideos = (JSONArray) jsonObject.get("items");
+			jsonObject = (JSONObject) youTubeVideos.get(0);
+			jsonObject = (JSONObject) jsonObject.get("id");
+			System.out.println(jsonObject.keySet());
+			System.out.println(jsonObject.get("videoId"));
+			videoId= (String) jsonObject.get("videoId");
+			
+		}
+		catch(ParseException e)
+		{
+			System.out.println("Failed");
+		}
+		
+		return "https://www.youtube.com/watch?v=" + videoId ;
 	}
 	
 
