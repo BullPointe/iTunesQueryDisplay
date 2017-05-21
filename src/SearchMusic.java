@@ -5,7 +5,7 @@ public class SearchMusic {
 	
 	private ArrayList SongList;
 	
-	public ArrayList<Song> MusicSearcher(String term, Integer limit)
+	public ArrayList<Song> MusicSearcher(String term, int limit)
 	{
 		
 			
