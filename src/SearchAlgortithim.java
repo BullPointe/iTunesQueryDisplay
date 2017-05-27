@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Random;
 
 public class SearchAlgortithim
 {
@@ -84,8 +85,13 @@ public class SearchAlgortithim
 		return null;
 	}
 	
-	
 	public String getYouTubeUrl(String query)
+	{
+		return "https://www.youtube.com/watch?v=" + getYouTubeVideoId(query);
+	}
+	
+	
+	public String getYouTubeVideoId(String query)
 	{
 		System.out.println(query);
 		String videoId = "";
@@ -114,7 +120,63 @@ public class SearchAlgortithim
 			System.out.println("Failed");
 		}
 		
-		return "https://www.youtube.com/watch?v=" + videoId ;
+		return videoId ;
+	}
+	
+	
+	public String[] generateSearch(){
+		double temp = Double.parseDouble((weatherResults.get(0)));
+		String weather = weatherResults.get(1).toLowerCase();
+		ReadFile rf = new ReadFile();
+		System.out.println(weather);
+		if(weather.equals("overcast")){
+			rf.setFileName("overcast.txt");
+		}
+		else if(weather.equals("partly cloudy")){
+			rf.setFileName("Partly-Cloudy.txt");
+		}
+		else if(weather.equals("clear") || weather.equals("sunny")){
+			if(temp >= 65){
+				rf.setFileName("Warm-Clear.txt");
+			}
+			else{
+				rf.setFileName("Cool-Clear.txt");
+			}
+		}
+		else{
+			rf.setFileName("Partly-Cloudy.txt");
+		}
+		String content = rf.getContents();
+		String[] spl = content.split(";");
+		String[] op = new String[3];
+		int[] rands = three_random(spl.length);
+		for(int i = 0; i < 3; i++){
+			System.out.println(rands[i]);
+			op[i] = spl[rands[i]];
+		}
+		return op;
+		
+	}
+	private int[] three_random(int upper){
+		int[] op = new int[3];
+		int filled = 0;
+		Random rand = new Random();
+		while(filled < 3){
+			boolean f = true;
+			int current = rand.nextInt(upper);
+			for(int i = 0; i < 3; i++){
+				if(current == op[i]){
+					f = false;
+					break;
+				}
+			}
+			if(f){
+				op[filled] = current;
+				filled += 1;
+			}
+		}
+		return op;
+		
 	}
 	
 
