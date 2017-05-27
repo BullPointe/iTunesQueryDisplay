@@ -1,9 +1,11 @@
 //import java.util.Locale;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Desktop;
 import java.awt.Font;
+import java.awt.ScrollPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -11,11 +13,14 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.border.TitledBorder;
 
@@ -43,7 +48,15 @@ public class MainScreen extends JFrame{
 	private JLabel SongNameJLabel;
 	private JLabel ArtistNameJLabel;
 	private	JButton songLinkJButton;
+	private JButton songLinkPJButton;
 	private URI uri;
+	private Song displayedSong;
+	private ArrayList<Song> songPlaylist = new ArrayList<Song>();
+	private JButton AddPlaylistJButton, viewPlaylistJButton;
+	private JLabel playlistTitleJLabel; 
+	private JTextArea playlistTitles;
+	private JButton playlistLinkJButton;
+	private JScrollPane playlistScrollPane;
 	
 	
 	public MainScreen() {
@@ -65,36 +78,45 @@ public class MainScreen extends JFrame{
 		// TODO Auto-generated method stub
 		welcomeJLabel = new JLabel("Welcome to the WeatherSmart Music Search");
 		welcomeJLabel.setBounds(20, 10, 540, 100);
+		welcomeJLabel.setForeground(Color.WHITE);
 		welcomeJLabel.setFont(new Font("Arial Black", Font.BOLD, 20));
 		contentPane.add(welcomeJLabel);
 		
 		weatherJLabel = new JLabel("Currently the Weather is:");
 		weatherJLabel.setBounds(20, 70, 470, 100);
+		weatherJLabel.setForeground(Color.WHITE);
 		weatherJLabel.setFont(new Font("Arial Black", Font.BOLD, 20));
 		contentPane.add(weatherJLabel);
 		
 		tempFJLabel = new JLabel("Temp in F :");
 		tempFJLabel.setBounds(40, 110, 470, 100);
+		tempFJLabel.setForeground(Color.WHITE);
 		tempFJLabel.setFont(new Font("Arial Black", Font.BOLD, 20));
 		contentPane.add(tempFJLabel);
 		
 		tempSkyJLabel = new JLabel("The Weather Outside :");
 		tempSkyJLabel.setBounds(40, 150, 470, 100);
+		tempSkyJLabel.setForeground(Color.WHITE);
 		tempSkyJLabel.setFont(new Font("Arial Black", Font.BOLD, 20));
 		contentPane.add(tempSkyJLabel);
 		
 		tempAirJLabel = new JLabel("The Air Pressure is :");
 		tempAirJLabel.setBounds(40, 190, 470, 100);
+		tempAirJLabel.setForeground(Color.WHITE);
 		tempAirJLabel.setFont(new Font("Arial Black", Font.BOLD, 20));
 		contentPane.add(tempAirJLabel);
 		
 		tempHumJLabel = new JLabel("The Humidity is :");
 		tempHumJLabel.setBounds(40, 230, 470, 100);
+		tempHumJLabel.setForeground(Color.WHITE);
 		tempHumJLabel.setFont(new Font("Arial Black", Font.BOLD, 20));
 		contentPane.add(tempHumJLabel);
 		
 		searchMusicJButton = new JButton("Enter the Music Warehouse !");
 		searchMusicJButton.setBounds(10, 320, 540, 100);
+		searchMusicJButton.setOpaque(false);
+		searchMusicJButton.setForeground(Color.WHITE);
+		searchMusicJButton.setContentAreaFilled(false);
 		searchMusicJButton.setFont(new Font("Arial Black", Font.BOLD, 20));
 		contentPane.add(searchMusicJButton);
 		searchMusicJButton.addActionListener(
@@ -111,10 +133,34 @@ public class MainScreen extends JFrame{
 		//SEARCHES AND ADDS THE WAETHER !!!!!
 				this.addWeatherContents();
 				
+		viewPlaylistJButton = new JButton("View Playlist");
+		viewPlaylistJButton.setBounds(670, 0, 200, 100);
+		viewPlaylistJButton.setVisible(false);
+		viewPlaylistJButton.setOpaque(false);
+		viewPlaylistJButton.setForeground(Color.WHITE);
+		viewPlaylistJButton.setContentAreaFilled(false);
+		viewPlaylistJButton.setFont(new Font("Arial Black", Font.BOLD, 20));
+		contentPane.add(viewPlaylistJButton);		
+		viewPlaylistJButton.addActionListener(
+				
+				new ActionListener()
+				{
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						cleardisplaySearchedSongs();
+						displayPlaylistTitles();
+					}
+					
+				}
+				
+				);
 				
 
 		SongsJLabel = new JLabel("Songs we Recommend: ");
 		SongsJLabel.setBounds(195,-30, 470, 100);
+		SongsJLabel.setForeground(Color.WHITE);
 		SongsJLabel.setFont(new Font("Arial Black", Font.BOLD, 20));
 		SongsJLabel.setVisible(false);
 		contentPane.add(SongsJLabel);
@@ -163,6 +209,7 @@ public class MainScreen extends JFrame{
 				tempJButton.setHorizontalTextPosition(JButton.CENTER);
 				tempJButton.setVerticalTextPosition(JButton.BOTTOM);
 				tempJButton.setVisible(false);
+				tempJButton.setForeground(Color.WHITE);
 				tempJButton.setOpaque(false);
 				tempJButton.setContentAreaFilled(false);
 				tempJButton.setBorderPainted(true);
@@ -189,7 +236,7 @@ public class MainScreen extends JFrame{
 		
 			nextJButton = new JButton("");
 			nextJButton.setBounds(700, 230, 150, 130);
-			nextJButton.setIcon(new ImageIcon("nextButton.png"));
+			nextJButton.setIcon(new ImageIcon("nextButton.jpg"));
 			nextJButton.setVisible(false);
 			nextJButton.setOpaque(false);
 			nextJButton.setContentAreaFilled(false);
@@ -221,7 +268,7 @@ public class MainScreen extends JFrame{
 			
 			backJButton = new JButton("");
 			backJButton.setBounds(5, 230, 150, 130);
-			backJButton.setIcon(new ImageIcon("backButton.png"));
+			backJButton.setIcon(new ImageIcon("backButton.jpg"));
 			backJButton.setVisible(false);
 			backJButton.setOpaque(false);
 			backJButton.setContentAreaFilled(false);
@@ -270,22 +317,103 @@ public class MainScreen extends JFrame{
 			contentPane.add(songPictureJLabel);
 			
 			SongNameJLabel = new JLabel("Song Name ");
-			SongNameJLabel.setBounds(195,160, 470, 100);
+			SongNameJLabel.setBounds(195,160, 600, 100);
+			SongNameJLabel.setForeground(Color.WHITE);
 			SongNameJLabel.setFont(new Font("Arial Black", Font.BOLD, 20));
 			SongNameJLabel.setVisible(false);
 			contentPane.add(SongNameJLabel);
 			
 			ArtistNameJLabel = new JLabel("Artist Name");
 			ArtistNameJLabel.setBounds(195,200, 850, 100);
+			ArtistNameJLabel.setForeground(Color.WHITE);
 			ArtistNameJLabel.setFont(new Font("Arial Black", Font.BOLD, 20));
 			ArtistNameJLabel.setVisible(false);
 			contentPane.add(ArtistNameJLabel);
 			
-			songLinkJButton = new JButton("Listen: ");
-			songLinkJButton.setBounds(10,300, 850, 100);
-			songLinkJButton.setFont(new Font("Arial Black", Font.BOLD, 20));
+			playlistTitleJLabel = new JLabel("Current Playlist");
+			playlistTitleJLabel.setBounds(414,10, 850, 100);
+			playlistTitleJLabel.setForeground(Color.WHITE);
+			playlistTitleJLabel.setFont(new Font("Arial Black", Font.BOLD, 20));
+			playlistTitleJLabel.setVisible(false);
+			contentPane.add(playlistTitleJLabel);
+			
+			playlistTitles = new JTextArea();
+			playlistTitles.setBounds(190,100, 800, 400);
+			playlistTitles.setBackground(Color.BLACK);
+			playlistTitles.setForeground(Color.WHITE);
+			playlistTitles.setFont(new Font("Arial Black", Font.BOLD, 20));
+			playlistTitles.setEditable(false);
+//			playlistTitles.setVisible(false);
+//			contentPane.add(playlistTitles);
+			
+			playlistScrollPane = new JScrollPane(playlistTitles);
+			playlistScrollPane.setBounds(190,100, 650, 400);
+			playlistScrollPane.setForeground(Color.BLACK);
+			playlistScrollPane.setBackground(Color.WHITE);
+			playlistScrollPane.setFont(new Font("Arial Black", Font.BOLD, 20));
+			playlistScrollPane.setVisible(false);
+			contentPane.add(playlistScrollPane);
+			
+			
+			
+			
+			playlistLinkJButton = new JButton("Listen to the Playlist");
+			playlistLinkJButton.setBounds(190,520, 650, 100);
+			playlistLinkJButton.setFont(new Font("Arial Black", Font.BOLD, 27));
+			playlistLinkJButton.setVisible(false);
+			playlistLinkJButton.setOpaque(false);
+			playlistLinkJButton.setForeground(Color.WHITE);
+			playlistLinkJButton.setContentAreaFilled(false);
+			playlistLinkJButton.setBorderPainted(true);
+			contentPane.add(playlistLinkJButton);
+			playlistLinkJButton.addActionListener(
+					
+					new ActionListener()
+					{
+
+						public void actionPerformed(ActionEvent e) {
+							// TODO Auto-generated method stub
+							String videoIds = "";
+							if(songPlaylist.isEmpty()== false)
+							{
+								for(int i=0;i<songPlaylist.size();i++)
+								{
+									if(i== songPlaylist.size()-1)
+									{
+										videoIds+=songPlaylist.get(i).getYoutubeVideoID();
+									}
+									else
+									{
+										videoIds+=songPlaylist.get(i).getYoutubeVideoID()+",";
+									}
+								}
+							}
+							String link = "http://www.youtube.com/watch_videos?video_ids="+ videoIds;
+							System.out.println(link);
+							
+							try{
+								 uri = new URI(link);
+							}
+							catch(URISyntaxException f)
+							{
+								f.printStackTrace();
+							}
+							openUri(uri);
+						}
+						
+					}
+					
+					);
+			
+			
+			
+			
+			songLinkJButton = new JButton("Listen to the Full Song");
+			songLinkJButton.setBounds(480,300, 450, 150);
+			songLinkJButton.setFont(new Font("Arial Black", Font.BOLD, 27));
 			songLinkJButton.setVisible(false);
 			songLinkJButton.setOpaque(false);
+			songLinkJButton.setForeground(Color.WHITE);
 			songLinkJButton.setContentAreaFilled(false);
 			songLinkJButton.setBorderPainted(true);
 			contentPane.add(songLinkJButton);
@@ -295,7 +423,37 @@ public class MainScreen extends JFrame{
 
 						public void actionPerformed(ActionEvent arg0) {
 							// TODO Auto-generated method stub
-							String temp =songLinkJButton.getText().replaceAll("Listen: ", "");
+							String temp = displayedSong.getYoutubeUrl();
+							try {
+								uri = new URI(temp);
+							} catch (URISyntaxException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							openUri(uri);
+						}
+						
+					}
+					
+					);
+			
+
+			songLinkPJButton = new JButton("Listen to the Preview");
+			songLinkPJButton.setBounds(10,300, 450, 150);
+			songLinkPJButton.setFont(new Font("Arial Black", Font.BOLD, 27));
+			songLinkPJButton.setVisible(false);
+			songLinkPJButton.setOpaque(false);
+			songLinkPJButton.setForeground(Color.WHITE);
+			songLinkPJButton.setContentAreaFilled(false);
+			songLinkPJButton.setBorderPainted(true);
+			contentPane.add(songLinkPJButton);
+			songLinkPJButton.addActionListener(
+					
+					new ActionListener(){
+
+						public void actionPerformed(ActionEvent arg0) {
+							// TODO Auto-generated method stub
+							String temp = displayedSong.getSongUrl();
 							try {
 								uri = new URI(temp);
 							} catch (URISyntaxException e) {
@@ -310,7 +468,39 @@ public class MainScreen extends JFrame{
 					);
 			
 			
-			
+			AddPlaylistJButton = new JButton("Add to Playlist");
+			AddPlaylistJButton.setBounds(240,460, 450, 150);
+			AddPlaylistJButton.setFont(new Font("Arial Black", Font.BOLD, 27));
+			AddPlaylistJButton.setVisible(false);
+			AddPlaylistJButton.setOpaque(false);
+			AddPlaylistJButton.setForeground(Color.WHITE);
+			AddPlaylistJButton.setContentAreaFilled(false);
+			AddPlaylistJButton.setBorderPainted(true);
+			contentPane.add(AddPlaylistJButton);
+			AddPlaylistJButton.addActionListener(
+					
+					new ActionListener()
+					{
+						public void actionPerformed(ActionEvent arg0) {
+							// TODO Auto-generated method stub
+							boolean ifAdd = true;
+							for(int i=0; i<songPlaylist.size();i++)
+							{
+								if(songPlaylist.get(i).getSongName().equals(displayedSong.getSongName()))
+								{
+									ifAdd = false;
+								}
+							}
+							if(ifAdd== true)
+							{
+								displayedSong.setYoutubeVideoID(searcher.getYouTubeVideoId(displayedSong.getArtistName().replaceAll(" ", "+")+ "+" + displayedSong.getSongName().replaceAll(" ", "+")));
+								songPlaylist.add(displayedSong);
+								System.out.println("ADDED SONG: " + displayedSong.getSongName());
+							}
+						}
+						
+					}
+					);
 			
 			
 			
@@ -326,13 +516,53 @@ public class MainScreen extends JFrame{
 				
 	
 
+	private void displayPlaylistTitles() 
+	{
+		this.playlistLinkJButton.setEnabled(true);
+		this.setSize(1000,900);
+		playlistTitleJLabel.setVisible(true);
+		playlistTitles.setVisible(true);
+//		playlistTitles.setEditable(true);
+		playlistScrollPane.setVisible(true);
+		this.playlistLinkJButton.setVisible(true);
+		
+		String temp = "";
+		if(this.songPlaylist.isEmpty()==false)
+		{
+			for(int i=0;i<this.songPlaylist.size();i++)
+			{
+				temp+= (i+1)+". "+  this.songPlaylist.get(i).getArtistName()+ "- " + this.songPlaylist.get(i).getSongName() +"\n";
+			}
+		}
+		else
+		{
+			this.playlistLinkJButton.setEnabled(false);
+		}
+		System.out.println(temp);
+		this.playlistTitles.setText(temp);
+		this.playlistTitles.setCaretPosition(0);
+//		playlistTitles.setEditable(false);
+		
+		
+	}
+
 	private void openUri(URI uri)
 	{
-		if (Desktop.isDesktopSupported()) {
-		      try {
+		if (Desktop.isDesktopSupported()) 
+		{
+		      try 
+		      {
 		        Desktop.getDesktop().browse(uri);
-		      } catch (IOException e) { /* TODO: error handling */ }
-		    } else { /* TODO: error handling */ }
+		      } 
+		      catch (IOException e) 
+		      { 
+		    	  /* TODO: error handling */   
+		      }
+		}
+		else 
+		{ 
+			/* TODO: error handling */ 
+		}
 		
 	}
 
@@ -404,7 +634,7 @@ public class MainScreen extends JFrame{
 
 	private void showClickedSong() 
 	{
-		this.setSize(1000,610);
+		this.setSize(1000,710);
 		Song clickedSong = null;
 		if(this.clickedPageIndex==1)
 		{
@@ -425,12 +655,18 @@ public class MainScreen extends JFrame{
 		this.songPictureJLabel.setVisible(true);
 		this.ArtistNameJLabel.setVisible(true);
 		this.songLinkJButton.setVisible(true);
+		this.songLinkPJButton.setVisible(true);
+		this.AddPlaylistJButton.setVisible(true);
+		
+		this.displayedSong = clickedSong;
 		
 		this.SongNameJLabel.setText("Song Title:"+ " "+ clickedSong.getSongName());
 		this.ArtistNameJLabel.setText("Artist:"+" "+clickedSong.getArtistName());
 		this.songPictureJLabel.setIcon(clickedSong.getIcon());
-		String songUrl = searcher.getYouTubeUrl(clickedSong.getArtistName().replaceAll(" ", "+")+ "+" + clickedSong.getSongName().replaceAll(" ", "+"));
-		this.songLinkJButton.setText("Listen:" +" "+songUrl);
+//		String songUrl = searcher.getYouTubeUrl(clickedSong.getArtistName().replaceAll(" ", "+")+ "+" + clickedSong.getSongName().replaceAll(" ", "+"));
+		this.displayedSong.setYoutubeUrl(searcher.getYouTubeUrl(clickedSong.getArtistName().replaceAll(" ", "+")+ "+" + clickedSong.getSongName().replaceAll(" ", "+")));
+		this.songLinkJButton.setText("Listen to the Full Song");
+		
 		
 		
 	}
@@ -441,6 +677,8 @@ public class MainScreen extends JFrame{
 		this.songPictureJLabel.setVisible(false);
 		this.ArtistNameJLabel.setVisible(false);
 		this.songLinkJButton.setVisible(false);
+		this.songLinkPJButton.setVisible(false);
+		this.AddPlaylistJButton.setVisible(false);
 	}
 	
 	
@@ -452,6 +690,11 @@ public class MainScreen extends JFrame{
 	{
 		this.backJButton.setBounds(5, 230, 150, 130);
 		this.SongsJLabel.setVisible(true);
+		this.viewPlaylistJButton.setVisible(true);
+		this.playlistTitleJLabel.setVisible(false);
+		this.playlistTitles.setVisible(false);
+		this.playlistLinkJButton.setVisible(false);
+		playlistScrollPane.setVisible(false);
 		if(pageNumber==1)
 		{
 			this.setSize(890,610);
@@ -490,7 +733,7 @@ public class MainScreen extends JFrame{
 					songs1.get(i).setBounds(songs1.get(i).getX()-160, songs1.get(i).getY(),  songs1.get(i).getWidth(),songs1.get(i).getHeight());
 					SongsJLabel.setBounds(SongsJLabel.getX()-17, SongsJLabel.getY(), SongsJLabel.getWidth(), SongsJLabel.getHeight());
 					nextJButton.setBounds(nextJButton.getX()-17, nextJButton.getY(), nextJButton.getWidth(), nextJButton.getHeight());
-
+					viewPlaylistJButton.setBounds(viewPlaylistJButton.getX()-21, viewPlaylistJButton.getY(), viewPlaylistJButton.getWidth(), viewPlaylistJButton.getHeight());
 				}
 			}
 			nextJButton.setVisible(true);
@@ -528,6 +771,7 @@ public class MainScreen extends JFrame{
 					SongsJLabel.setBounds(SongsJLabel.getX()+17, SongsJLabel.getY(), SongsJLabel.getWidth(), SongsJLabel.getHeight());
 					songs1.get(i).setBounds(songs1.get(i).getX()+160, songs1.get(i).getY(),  songs1.get(i).getWidth(),songs1.get(i).getHeight());
 					nextJButton.setBounds(nextJButton.getX()+17, nextJButton.getY(), nextJButton.getWidth(), nextJButton.getHeight());
+					viewPlaylistJButton.setBounds(viewPlaylistJButton.getX()+21, viewPlaylistJButton.getY(), viewPlaylistJButton.getWidth(), viewPlaylistJButton.getHeight());
 				}
 			}
 			nextJButton.setVisible(true);
@@ -585,6 +829,7 @@ public class MainScreen extends JFrame{
 		nextJButton.setVisible(false);
 		backJButton.setBounds(0,0, 150, 130);
 		backJButton.setVisible(true);
+		this.viewPlaylistJButton.setVisible(false);
 
 	}
 
@@ -628,9 +873,11 @@ public class MainScreen extends JFrame{
 		private void startMusicSearch(ActionEvent e) {
 			// TODO Auto-generated method stub
 //			String tempTerm = searcher.getTerm();
-			String tempTerm1 = "Kanye";
-			String tempTerm2 = "Adele";
-			String tempTerm3 = "Joey BadA$$";
+			
+			String temp[] = searcher.generateSearch(); 
+			String tempTerm1 = temp[0] ;
+			String tempTerm2 = temp[1];
+			String tempTerm3 = temp[2];
 			this.currentSearchList = musicSearcher.MusicSearcher(tempTerm1, 20);
 			this.currentSearchList2 = musicSearcher.MusicSearcher(tempTerm2,20);
 			this.currentSearchList3 = musicSearcher.MusicSearcher(tempTerm3,20);
@@ -647,10 +894,12 @@ public class MainScreen extends JFrame{
 		// TODO Auto-generated method stub
 		
 		contentPane = this.getContentPane();
-		this.setTitle("RainyDay Music Searcher");
+		this.setTitle("WeatherSmart Music Search");
 		this.setSize(600, 610);
 		this.setVisible(true);
 		this.setLayout(null);
+		contentPane.setBackground(Color.BLACK);
+		contentPane.setForeground(Color.WHITE);
 	}
 
 }
