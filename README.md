@@ -1,7 +1,7 @@
 # iTunesQueryDisplay
 An ITunes Query Search Display
 
-PLEASE DO NOT COMMIT TO THIS PROJECT
+x
 
 3 Parts
 
